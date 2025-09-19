@@ -48,136 +48,166 @@ import json
 import re
 
 
-def filter_by_id(user_id):
+def load_users():
     """
-    Filters and prints user from users.json whose ID matches the given ID.
+    Loads users from users.json and handles file-related errors.
 
-    Args:
-        user_id (int): The user ID to search for.
+    Returns:
+        list: A list of user dictionaries or an empty list if error occurs.
     """
-    with open("users.json", "r") as file:
-        users = json.load(file)
-
-    matched_user = next((user for user in users if user["id"] == user_id), None)
-
-    if matched_user:
-        print("\nUser found by ID:")
-        print(matched_user)
-    else:
-        print(f"No user found with ID {user_id}.")
+    try:
+        with open("users.json", "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        print("Error: 'users.json' file not found.")
+    except json.JSONDecodeError:
+        print("Error: 'users.json' contains invalid JSON.")
+    return []
 
 
 def filter_users_by_name(name):
     """
-    Filters and prints users from users.json whose name matches the given name.
+    Filters and prints users whose name matches the given input.
 
     Args:
-        name (str): The name to filter users by (case-insensitive).
+        name (str): Name to filter users by.
     """
-    with open("users.json", "r") as file:
-        users = json.load(file)
+    users = load_users()
+    if not users:
+        return
 
     filtered_users = [
-        user for user in users if user["name"].lower() == name.lower()
+        user for user in users
+        if user["name"].lower() == name.lower()
     ]
 
     if filtered_users:
-        print("\nMatching users by name:")
         for user in filtered_users:
-            print(user)
+            print("*" * 50)
+            print(f"ID: {user['id']} ",
+                  f"Name: {user['name']}, Age: {user['age']} ",
+                  f"Email: {user.get('email', 'N/A')}")
+            print("*" * 50)
     else:
         print("No users found with that name.")
 
 
 def filter_by_age(age):
     """
-    Filters and prints users from users.json who have the given age.
+    Filters and prints users whose age matches the given input.
 
     Args:
-        age (int): The age to filter users by.
+        age (int): Age to filter users by.
     """
-    with open("users.json", "r") as file:
-        users = json.load(file)
+    users = load_users()
+    if not users:
+        return
 
     filtered_users = [
         user for user in users if user["age"] == age
     ]
 
     if filtered_users:
-        print("\nMatching users by age:")
         for user in filtered_users:
-            print(user)
+            print("*" * 50)
+            print(f"ID: {user['id']} ",
+                  f"Name: {user['name']}, Age: {user['age']} ",
+                  f"Email: {user.get('email', 'N/A')}")
+            print("*" * 50)
     else:
         print("No users found with that age.")
 
 
 def filter_by_email(email):
     """
-    Filters and prints users from users.json who have the given email.
+    Filters and prints users whose email matches the given input.
 
     Args:
-        email (str): The email to filter users by (case-insensitive).
+        email (str): Email address to filter users by.
     """
-    with open("users.json", "r") as file:
-        users = json.load(file)
+    users = load_users()
+    if not users:
+        return
 
     filtered_users = [
-        user for user in users if user["email"].lower() == email.lower()
+        user for user in users
+        if user.get("email", "").lower() == email.lower()
     ]
 
     if filtered_users:
-        print("\nMatching users by email:")
         for user in filtered_users:
-            print(user)
+            print("*" * 50)
+            print(f"ID: {user['id']} ",
+                  f"Name: {user['name']}, Age: {user['age']} ",
+                  f"Email: {user.get('email', 'N/A')}")
+            print("*" * 50)
     else:
-        print("No users found with that email address.")
+        print("No users found with that email.")
+
+
+def is_valid_email(email):
+    """
+    Validates basic structure of an email address using regex.
+
+    Args:
+        email (str): Email to validate.
+
+    Returns:
+        bool: True if valid, False otherwise.
+    """
+    pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+    return re.match(pattern, email) is not None
 
 
 if __name__ == "__main__":
     """
     Entry point for the user filtering script.
-    Prompts the user to choose a filter option and processes accordingly.
+    Allows filtering users by name, age, or email with input validation.
     """
     print("=================================================")
     print("        Welcome to the User Filter Tool          ")
     print("=================================================\n")
-
+    valid_options = ("name", "age", "email")
     filter_option = input(
-        "What would you like to filter by? (id / name / age / email): "
+        "What would you like to filter by? (name / age / email): "
     ).strip().lower()
 
-    if filter_option == "id":
-        while True:
-            try:
-                user_id = int(input("Enter user ID to search: ").strip())
-                filter_by_id(user_id)
-                break
-            except ValueError:
-                print("Invalid input. Please enter a numeric ID.")
-
+    if filter_option not in valid_options:
+        print("Invalid filter option. Supported: name, age, email.")
     elif filter_option == "name":
-        name_to_search = input("Enter a name to filter users: ").strip()
-        filter_users_by_name(name_to_search)
-
+        while True:
+            name_to_search = input("Enter a name to filter users: ").strip()
+            if name_to_search:
+                filter_users_by_name(name_to_search)
+                break
+            else:
+                print("Name cannot be empty. Please enter a valid name.")
     elif filter_option == "age":
         while True:
-            try:
-                age_to_search = int(input("Enter an age to filter users: ").strip())
-                filter_by_age(age_to_search)
-                break
-            except ValueError:
-                print("Invalid input. Please enter a number.")
+            age_input = input("Enter an age to filter users: ").strip()
+            if not age_input:
+                print("Age cannot be empty. Please enter a valid number.")
+                continue
+            if not age_input.isdigit():
+                print("Invalid age! Please enter a number.")
+                continue
 
+            age_to_search = int(age_input)
+            if age_to_search < 0:
+                print("Age must be a positive number.")
+                continue
+
+            filter_by_age(age_to_search)
+            break
     elif filter_option == "email":
         while True:
             email_to_search = input("Enter an email to filter users: ").strip()
+            if not email_to_search:
+                print("Email cannot be empty.")
+                continue
+            if not is_valid_email(email_to_search):
+                print("Invalid email format. Try again.")
+                continue
 
-            # Inline email format validation
-            if re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email_to_search):
-                filter_by_email(email_to_search)
-                break
-            else:
-                print("Invalid email format! Please enter a valid email address.")
-
-    else:
-        print("Invalid option! Please choose from: id, name, age, or email.")
+            filter_by_email(email_to_search)
+            break
