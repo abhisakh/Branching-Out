@@ -47,6 +47,14 @@ Abhisakh Sarma
 import json
 import re
 
+# ANSI color codes
+COLOR_RESET = "\033[0m"
+COLOR_GREEN = "\033[32m"
+COLOR_RED = "\033[31m"
+COLOR_YELLOW = "\033[33m"
+COLOR_CYAN = "\033[36m"
+COLOR_MAGENTA = "\033[35m"
+
 
 def load_users():
     """
@@ -59,9 +67,9 @@ def load_users():
         with open("users.json", "r") as file:
             return json.load(file)
     except FileNotFoundError:
-        print("Error: 'users.json' file not found.")
+        print(f"{COLOR_RED}Error: 'users.json' file not found.{COLOR_RESET}")
     except json.JSONDecodeError:
-        print("Error: 'users.json' contains invalid JSON.")
+        print(f"{COLOR_RED}Error: 'users.json' contains invalid JSON.{COLOR_RESET}")
     return []
 
 
@@ -83,13 +91,14 @@ def filter_users_by_name(name):
 
     if filtered_users:
         for user in filtered_users:
-            print("*" * 50)
-            print(f"ID: {user['id']} ",
-                  f"Name: {user['name']}, Age: {user['age']} ",
-                  f"Email: {user.get('email', 'N/A')}")
-            print("*" * 50)
+            print(f"{COLOR_CYAN}{'*' * 50}{COLOR_RESET}")
+            print(f"{COLOR_YELLOW}ID: {user['id']}{COLOR_RESET} "
+                  f"{COLOR_GREEN}Name: {user['name']}{COLOR_RESET}, "
+                  f"Age: {user['age']} "
+                  f"{COLOR_MAGENTA}Email: {user.get('email', 'N/A')}{COLOR_RESET}")
+            print(f"{COLOR_CYAN}{'*' * 50}{COLOR_RESET}")
     else:
-        print("No users found with that name.")
+        print(f"{COLOR_RED}No users found with that name.{COLOR_RESET}")
 
 
 def filter_by_age(age):
@@ -103,19 +112,18 @@ def filter_by_age(age):
     if not users:
         return
 
-    filtered_users = [
-        user for user in users if user["age"] == age
-    ]
+    filtered_users = [user for user in users if user["age"] == age]
 
     if filtered_users:
         for user in filtered_users:
-            print("*" * 50)
-            print(f"ID: {user['id']} ",
-                  f"Name: {user['name']}, Age: {user['age']} ",
-                  f"Email: {user.get('email', 'N/A')}")
-            print("*" * 50)
+            print(f"{COLOR_CYAN}{'*' * 50}{COLOR_RESET}")
+            print(f"{COLOR_YELLOW}ID: {user['id']}{COLOR_RESET} "
+                  f"{COLOR_GREEN}Name: {user['name']}{COLOR_RESET}, "
+                  f"Age: {user['age']} "
+                  f"{COLOR_MAGENTA}Email: {user.get('email', 'N/A')}{COLOR_RESET}")
+            print(f"{COLOR_CYAN}{'*' * 50}{COLOR_RESET}")
     else:
-        print("No users found with that age.")
+        print(f"{COLOR_RED}No users found with that age.{COLOR_RESET}")
 
 
 def filter_by_email(email):
@@ -130,20 +138,19 @@ def filter_by_email(email):
         return
 
     filtered_users = [
-        user for user in users
-        if user.get("email", "").lower() == email.lower()
+        user for user in users if user.get("email", "").lower() == email.lower()
     ]
 
     if filtered_users:
         for user in filtered_users:
-            print("*" * 50)
-            print(f"ID: {user['id']} ",
-                  f"Name: {user['name']}, Age: {user['age']} ",
-                  f"Email: {user.get('email', 'N/A')}")
-            print("*" * 50)
+            print(f"{COLOR_CYAN}{'*' * 50}{COLOR_RESET}")
+            print(f"{COLOR_YELLOW}ID: {user['id']}{COLOR_RESET} "
+                  f"{COLOR_GREEN}Name: {user['name']}{COLOR_RESET}, "
+                  f"Age: {user['age']} "
+                  f"{COLOR_MAGENTA}Email: {user.get('email', 'N/A')}{COLOR_RESET}")
+            print(f"{COLOR_CYAN}{'*' * 50}{COLOR_RESET}")
     else:
-        print("No users found with that email.")
-
+        print(f"{COLOR_RED}No users found with that email.{COLOR_RESET}")
 
 def is_valid_email(email):
     """
@@ -164,49 +171,60 @@ if __name__ == "__main__":
     Entry point for the user filtering script.
     Allows filtering users by name, age, or email with input validation.
     """
-    print("=================================================")
-    print("        Welcome to the User Filter Tool          ")
-    print("=================================================\n")
+    print(f"{COLOR_CYAN}================================================={COLOR_RESET}")
+    print(f"{COLOR_GREEN}        Welcome to the User Filter Tool          {COLOR_RESET}")
+    print(f"{COLOR_CYAN}=================================================\n{COLOR_RESET}")
     valid_options = ("name", "age", "email")
     filter_option = input(
-        "What would you like to filter by? (name / age / email): "
+        f"{COLOR_YELLOW}What would you like to filter by? "
+        f"(name / age / email): {COLOR_RESET}"
     ).strip().lower()
 
     if filter_option not in valid_options:
-        print("Invalid filter option. Supported: name, age, email.")
+        print(f"{COLOR_RED}Invalid filter option. Supported: name, age, email."
+              f"{COLOR_RESET}")
     elif filter_option == "name":
         while True:
-            name_to_search = input("Enter a name to filter users: ").strip()
+            name_to_search = input(
+                f"{COLOR_YELLOW}Enter a name to filter users: {COLOR_RESET}"
+            ).strip()
             if name_to_search:
                 filter_users_by_name(name_to_search)
                 break
             else:
-                print("Name cannot be empty. Please enter a valid name.")
+                print(f"{COLOR_RED}Name cannot be empty. Please enter a valid name."
+                      f"{COLOR_RESET}")
     elif filter_option == "age":
         while True:
-            age_input = input("Enter an age to filter users: ").strip()
+            age_input = input(
+                f"{COLOR_YELLOW}Enter an age to filter users: {COLOR_RESET}"
+            ).strip()
             if not age_input:
-                print("Age cannot be empty. Please enter a valid number.")
+                print(f"{COLOR_RED}Age cannot be empty. Please enter a valid number."
+                      f"{COLOR_RESET}")
                 continue
             if not age_input.isdigit():
-                print("Invalid age! Please enter a number.")
+                print(f"{COLOR_RED}Invalid age! Please enter a number."
+                      f"{COLOR_RESET}")
                 continue
 
             age_to_search = int(age_input)
             if age_to_search < 0:
-                print("Age must be a positive number.")
+                print(f"{COLOR_RED}Age must be a positive number.{COLOR_RESET}")
                 continue
 
             filter_by_age(age_to_search)
             break
     elif filter_option == "email":
         while True:
-            email_to_search = input("Enter an email to filter users: ").strip()
+            email_to_search = input(
+                f"{COLOR_YELLOW}Enter an email to filter users: {COLOR_RESET}"
+            ).strip()
             if not email_to_search:
-                print("Email cannot be empty.")
+                print(f"{COLOR_RED}Email cannot be empty.{COLOR_RESET}")
                 continue
             if not is_valid_email(email_to_search):
-                print("Invalid email format. Try again.")
+                print(f"{COLOR_RED}Invalid email format. Try again.{COLOR_RESET}")
                 continue
 
             filter_by_email(email_to_search)
