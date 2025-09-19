@@ -61,7 +61,7 @@ def load_users():
     Loads users from users.json and handles file-related errors.
 
     Returns:
-        list: A list of user dictionaries or empty list if error occurs.
+        list: A list of user dictionaries or an empty list if error occurs.
     """
     try:
         with open("users.json", "r") as file:
@@ -85,7 +85,8 @@ def filter_users_by_name(name):
         return
 
     filtered_users = [
-        user for user in users if user["name"].lower() == name.lower()
+        user for user in users
+        if user["name"].lower() == name.lower()
     ]
 
     if filtered_users:
@@ -150,7 +151,6 @@ def filter_by_email(email):
             print(f"{COLOR_CYAN}{'*' * 50}{COLOR_RESET}")
     else:
         print(f"{COLOR_RED}No users found with that email.{COLOR_RESET}")
-
 
 def is_valid_email(email):
     """
