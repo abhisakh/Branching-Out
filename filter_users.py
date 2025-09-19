@@ -1,4 +1,5 @@
 import json
+import re
 
 
 def filter_users_by_name(name):
@@ -38,6 +39,24 @@ def filter_by_age(age):
         print(user)
 
 
+def filter_by_email(email):
+    """
+    Filters and prints users from users.json who have the given email.
+
+    Args:
+        age (str): The ageemail id to filter users by.
+    """
+    with open("users.json", "r") as file:
+        users = json.load(file)
+
+    filtered_users = [
+        user for user in users if user["email"] == email
+    ]
+
+    for user in filtered_users:
+        print(user)
+
+
 if __name__ == "__main__":
     """
     Entry point for the user filtering script.
@@ -46,7 +65,7 @@ if __name__ == "__main__":
     """
     filter_option = input(
         "What would you like to filter by? "
-        "(Currently, only 'name' and 'age' are supported): "
+        "(Currently, only 'name', 'age' and 'email'  are supported): "
     ).strip().lower()
 
     if filter_option == "name":
@@ -65,6 +84,18 @@ if __name__ == "__main__":
                 break
             except ValueError:
                 print("Invalid age! Please enter a number.")
+
+    elif filter_option == "email":
+        while True:
+            email_to_search = input("Enter an email to filter users: ").strip()
+
+            # Inline regex validation (no external function)
+            if re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email_to_search):
+                # If valid, proceed to filter
+                filter_by_email(email_to_search)
+                break
+            else:
+                print("Invalid email format! Please enter a valid email address.")
 
     else:
         print("Filtering by that option is not yet supported.")
