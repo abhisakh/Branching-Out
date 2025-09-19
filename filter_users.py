@@ -1,3 +1,48 @@
+"""
+===============================================================================
+                            USER FILTERING TOOL
+===============================================================================
+
+Description:
+------------
+This Python script allows users to search and filter user data based on
+specific fields such as name, age, or email. The user data is stored in a
+JSON file (`users.json`), and the script uses interactive command-line input
+to query the dataset.
+
+The script provides:
+- Case-insensitive name and email searches
+- Exact age match filtering
+- Real-time input validation for age and email
+- User-friendly output formatting
+- Error messages when no matches are found
+
+This tool can be used for:
+---------------------------
+- Small-scale user data analysis
+- Admin panels that query JSON datasets
+- Educational use to demonstrate JSON parsing, filtering, and validation
+
+File Required:
+--------------
+- `users.json`: A JSON file containing a list of users. Each user should
+  be a dictionary with at least the fields: `name`, `age`, and `email`.
+
+Example `users.json`:
+----------------------
+[
+    {"name": "Alice", "age": 25, "email": "alice@example.com"},
+    {"name": "Bob", "age": 30, "email": "bob@example.com"},
+    {"name": "Charlie", "age": 25, "email": "charlie@example.com"}
+]
+
+Author:
+-------
+Abhisakh Sarma
+
+===============================================================================
+"""
+
 import json
 import re
 
