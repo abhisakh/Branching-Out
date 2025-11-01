@@ -7,6 +7,23 @@ It supports filtering by name, age, or email, and includes robust input validati
 
 ---
 
+## 🧠 Learn & Practice with Branching Out
+
+This project is a great way to learn and practice working with HTML templates and JSON data in Python.
+By exploring how the script dynamically injects animal data into an HTML file, you’ll gain hands-on experience with:
+
+Structuring and parsing JSON datasets
+
+Using Python file I/O to read, modify, and generate HTML files
+
+Implementing a simple template-based HTML generator
+
+Applying data filtering logic to control page content
+
+It’s an excellent educational resource for beginners who want to understand how Python can automate webpage creation and work as a bridge between data processing and front-end presentation.
+
+---
+
 ## ✨ Features
 
 ### 🔍 Search & Filter
