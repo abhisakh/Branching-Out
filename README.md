@@ -46,6 +46,13 @@ BranchingOut/
 
 ```
 ---
+## Clone the Repository
+
+```bash
+git clone https://github.com/abhisakh/Branching-Out.git
+cd Branching-Out
+```
+---
 
 ## 🧾 Example users.json
 ```Bash
